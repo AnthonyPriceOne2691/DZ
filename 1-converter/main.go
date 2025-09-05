@@ -18,6 +18,6 @@ func getUserInput() string {
 	return input
 }
 
-func calculate(int float64, cur1 string, cur2 string) float64 {
+func calculate(num float64, cur1 string, cur2 string) float64 {
 	return 0
 }
