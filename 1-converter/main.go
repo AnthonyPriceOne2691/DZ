@@ -11,3 +11,13 @@ func main() {
 
 	fmt.Printf("1 EUR = %.2f RUB\n", eurToRub)
 }
+
+func getUserInput() string {
+	var input string
+	fmt.Scan(&input)
+	return input
+}
+
+func calculate() float64 {
+	return 0
+}
