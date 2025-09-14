@@ -15,23 +15,23 @@ var rates = map[string]float64{
 func main() {
 	fmt.Println("=== Currency Converter ===")
 
-	source := getCurrency("Enter the source currency (USD, EUR, RUB): ")
+	source := getCurrency("Enter the source currency (USD, EUR, RUB): ", &rates)
 	amount := getNumber("Enter the amount: ")
-	target := getCurrency("Enter the target currency (USD, EUR, RUB): ")
+	target := getCurrency("Enter the target currency (USD, EUR, RUB): ", &rates)
 
-	result := calculate(amount, source, target)
+	result := calculate(amount, source, target, &rates)
 
 	fmt.Printf("\n%.2f %s = %.2f %s\n", amount, source, result, target)
 }
 
-func getCurrency(prompt string) string {
+func getCurrency(prompt string, rates *map[string]float64) string {
 	for {
 		fmt.Print(prompt)
 		var input string
 		fmt.Scanln(&input)
 		input = strings.ToUpper(input)
 
-		for k := range rates {
+		for k := range *rates {
 			if k == input {
 				return input
 			}
@@ -55,14 +55,14 @@ func getNumber(prompt string) float64 {
 	}
 }
 
-func calculate(amount float64, cur1 string, cur2 string) float64 {
-	usd := amount / rates[cur1]
-	return usd * rates[cur2]
+func calculate(amount float64, cur1 string, cur2 string, rates *map[string]float64) float64 {
+	usd := amount / (*rates)[cur1]
+	return usd * (*rates)[cur2]
 }
 
-func keys(m map[string]float64) []string {
-	keys := make([]string, 0, len(m))
-	for k := range m {
+func keys(m *map[string]float64) []string {
+	keys := make([]string, 0, len(*m))
+	for k := range *m {
 		keys = append(keys, k)
 	}
 	return keys
