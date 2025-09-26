@@ -1,14 +1,16 @@
 package main
 
 import (
+	"fmt"
+	"reflect"
 	"time"
 )
 
 type Bin struct {
-	ID        string   
-	Private   bool      
-	CreatedAt time.Time 
-	Name      string    
+	ID        string 	 `json:"id"`
+	Private   bool    	 `json:"private"`
+	CreatedAt time.Time  `json:"created_at"`
+	Name      string     `json:"name"`
 }
 
 type BinList struct {
@@ -26,5 +28,6 @@ func NewBin(id string, name string, private bool) Bin {
 
 
 func main() {
-
+	field, _ := reflect.TypeOf(Bin{}).FieldByName("Private")
+	fmt.Println(field.Tag)
 }
