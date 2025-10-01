@@ -4,30 +4,18 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
-	"time"
+
+	"jsoncli/bins"
 )
 
-type Bin struct {
-	ID        string    `json:"id"`
-	Private   bool      `json:"private"`
-	CreatedAt time.Time `json:"created_at"`
-	Name      string    `json:"name"`
+type Storage interface {
+	Save(filename string, list bins.BinList) error
+	Load(filename string) (bins.BinList, error)
 }
 
-type BinList struct {
-	Bins []Bin `json:"bins"`
-}
+type FileStorage struct{}
 
-func NewBin(id string, name string, private bool) Bin {
-	return Bin{
-		ID:        id,
-		Name:      name,
-		Private:   private,
-		CreatedAt: time.Now(),
-	}
-}
-
-func Save(filename string, list BinList) error {
+func (fs FileStorage) Save(filename string, list bins.BinList) error {
 	data, err := json.MarshalIndent(list, "", "  ")
 	if err != nil {
 		return err
@@ -36,20 +24,20 @@ func Save(filename string, list BinList) error {
 	return os.WriteFile(filename, data, 0644)
 }
 
-func Load(filename string) (BinList, error) {
+func (fs FileStorage) Load(filename string) (bins.BinList, error) {
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		return BinList{}, err
+		return bins.BinList{}, err
 	}
 
 	if len(data) == 0 {
-		return BinList{}, errors.New("файл пустой")
+		return bins.BinList{}, errors.New("файл пустой")
 	}
 
-	var list BinList
+	var list bins.BinList
 	err = json.Unmarshal(data, &list)
 	if err != nil {
-		return BinList{}, err
+		return bins.BinList{}, err
 	}
 
 	return list, nil
