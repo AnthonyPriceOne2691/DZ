@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+var operations = map[string]func([]float64) float64{
+	"SUM": sum,
+	"AVG": avg,
+	"MED": median,
+}
 
 func main() {
 	operation := strings.ToUpper(readInput("Введите операцию (SUM, AVG, MED): "))
@@ -24,16 +29,8 @@ func main() {
 		return
 	}
 
-	switch operation {
-	case "SUM":
-		fmt.Printf("SUM = %.2f\n", sum(numbers))
-	case "AVG":
-		fmt.Printf("AVG = %.2f\n", avg(numbers))
-	case "MED":
-		fmt.Printf("MED = %.2f\n", median(numbers))
-	default:
-		fmt.Println("Неизвестная операция. Используйте: AVG, SUM или MED.")
-	}
+	result := operations[operation](numbers)
+	fmt.Printf("%s = %.2f\n", operation, result)
 }
 
 func readInput(prompt string) string {
